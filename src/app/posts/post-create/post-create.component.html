@@ -8,6 +8,7 @@
         name="title"
         ngModel
         required
+        placeholder="Post Title"
         minlength="3"
         #localInputRef="ngModel">
         <!-- We could have used: postForm.getControl('title').invalid to be more explicit -->
@@ -21,6 +22,7 @@
         rows="4"
         name="content"
         ngModel
+        placeholder="Post Content"
         required
         #innerContentRef="ngModel"></textarea>
         <mat-error *ngIf="innerContentRef.invalid">Please write some content</mat-error>
