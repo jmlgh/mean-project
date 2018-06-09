@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 @Injectable({providedIn: 'root'})
 export class PostService {
   private posts: Array<Post> = [];
-  private postUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<Post[]>();
 
   getPosts() {
     // using the spread operator
@@ -16,13 +16,13 @@ export class PostService {
   }
 
   getPostUpdateListener() {
-    return this.postUpdated.asObservable();
+    return this.postsUpdated.asObservable();
   }
 
   addPost(title: string, content: string){
     const post: Post = { title: title, content: content };
     this.posts.push(post);
     // next() -> "emit" the new value created
-    this.postUpdated.next([...this.posts]);
+    this.postsUpdated.next([...this.posts]);
   }
 }

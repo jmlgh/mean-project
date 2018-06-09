@@ -26,6 +26,7 @@ export class PostCreateComponent {
     // this has become obsolete since we are now using a service to pass Post data to the classes
     // this.postCreated.emit(post)
     this.postService.addPost(form.value.title, form.value.content);
+    // default Angular method that sets fields to empty string and resets validators
     form.resetForm();
   }
 }
