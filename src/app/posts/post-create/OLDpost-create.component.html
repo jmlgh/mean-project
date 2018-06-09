@@ -1,0 +1,15 @@
+<!-- This is the old version without using the form element -->
+<!-- When we use the form element (and import the forms module) Angular creates an object behind the scenes -->
+<!-- Which helps us a lot in using validations and data binding -->
+<mat-card>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="enteredTitle">
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput rows="6" [(ngModel)]="enteredContent"></textarea>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="onAddPost()">Save Post</button>
+  </mat-card>
