@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+const Post = require('./models/post');
+
 // body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -28,7 +30,10 @@ app.use( (req, res, next) =>{
 // routes
 app.post('/api/posts', (req, res, next) => {
   // body is created by bodyParser
-  const post = req.body;
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  })
   console.log(post);
   // 201 -> ok, new resource created
   res.status(201).json({
