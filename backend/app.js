@@ -1,9 +1,20 @@
 // dependencies
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose');
 const Post = require('./models/post');
+
+const app = express();
+
+// connect to MongoDb database
+// returns a promise
+mongoose.connect('mongodb+srv://javi:efFuv7RQJkL1M0t4@mean-project-amges.mongodb.net/test?retryWrites=true')
+  .then( () => {
+    console.log('Connected to database');
+  })
+  .catch( () => {
+    console.log('Connection to database failed');
+  });
 
 // body parser middleware
 app.use(bodyParser.json());
