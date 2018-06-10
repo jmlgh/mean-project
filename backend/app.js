@@ -1,6 +1,11 @@
 // dependencies
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+
+// body parser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
 
 // handle CORS
 app.use( (req, res, next) =>{
@@ -20,7 +25,18 @@ app.use( (req, res, next) =>{
   next();
 });
 
-app.use('/api/posts' ,(req, res, next) => {
+// routes
+app.post('/api/posts', (req, res, next) => {
+  // body is created by bodyParser
+  const post = req.body;
+  console.log(post);
+  // 201 -> ok, new resource created
+  res.status(201).json({
+    message: 'Post data successfully'
+  });
+});
+
+app.get('/api/posts' ,(req, res, next) => {
   const posts = [
     {
       id: 'hga1231',
