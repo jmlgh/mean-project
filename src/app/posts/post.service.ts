@@ -23,7 +23,8 @@ export class PostService {
     // get method automatically extracts data from json
     this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
       // before we subscribe the new value transform the data to solve the id - _id problem
-      // args: a function that gets applied to every element of the array
+      // args: a function that gets applied to every element (response data)
+      // pipe -> allows us to add more operators to data (it accepts multiple operators)
       .pipe( map( (postData) => {
         // this is already an observable
         return postData.posts.map( post => {
@@ -31,8 +32,8 @@ export class PostService {
             title: post.title,
             content: post.content,
             id: post._id
-          }
-        } )
+          };
+        });
       }))
       .subscribe((transformedPostData) => {
         this.posts = transformedPostData;
@@ -52,6 +53,13 @@ export class PostService {
         this.posts.push(post);
         // next() -> "emit" the new value created
         this.postsUpdated.next([...this.posts]);
+      });
+  }
+
+  deletePost(postId: string){
+    this.http.delete('http://localhost:3000/api/posts/' + postId)
+      .subscribe(() => {
+        console.log('Post deleted')
       });
   }
 }
