@@ -1,6 +1,7 @@
 import { Post } from './post.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 // this is kind of an EventEmitter but with more functionalities
 import { Subject } from 'rxjs';
@@ -20,9 +21,21 @@ export class PostService {
     // no need to unsubscribe here becaouse when we listen on observables
     // that are Angular defaults, it gets handled automatically
     // get method automatically extracts data from json
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
-      .subscribe((postData) => {
-        this.posts = postData.posts;
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+      // before we subscribe the new value transform the data to solve the id - _id problem
+      // args: a function that gets applied to every element of the array
+      .pipe( map( (postData) => {
+        // this is already an observable
+        return postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id
+          }
+        } )
+      }))
+      .subscribe((transformedPostData) => {
+        this.posts = transformedPostData;
         this.postsUpdated.next([...this.posts]);
       });
   }

@@ -1,6 +1,7 @@
 // dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
+// required for the database connection
 const mongoose = require('mongoose');
 const Post = require('./models/post');
 
@@ -8,7 +9,9 @@ const app = express();
 
 // connect to MongoDb database
 // returns a promise
-mongoose.connect('mongodb+srv://javi:efFuv7RQJkL1M0t4@mean-project-amges.mongodb.net/test?retryWrites=true')
+// remember to change 'test' default database to an appropiate one
+// mongoose will automatically create a collection based on the plural form of the model name
+mongoose.connect('mongodb+srv://javi:efFuv7RQJkL1M0t4@mean-project-amges.mongodb.net/node-angular?retryWrites=true')
   .then( () => {
     console.log('Connected to database');
   })
@@ -45,7 +48,8 @@ app.post('/api/posts', (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   })
-  console.log(post);
+  // save new post in mongodb (this method comes from mongoose)
+  post.save();
   // 201 -> ok, new resource created
   res.status(201).json({
     message: 'Post data successfully'
@@ -53,22 +57,18 @@ app.post('/api/posts', (req, res, next) => {
 });
 
 app.get('/api/posts' ,(req, res, next) => {
-  const posts = [
-    {
-      id: 'hga1231',
-      title: 'First server-side post',
-      content: 'This is coming from the server',
-    },
-    {
-      id: 'sdf675',
-      title: 'Second server-side post',
-      content: 'This is coming from the server!',
-    }
-  ]
-  res.status(200).json({
-    msg: 'Posts fetched succesfully',
-    posts: posts
-  });
+  // method find also comes from mongoose
+  // find returns all entries that match with the Schema
+  // Post.find((err, documents) => {}); -> this is valid
+  // but lets work with promises
+  Post.find()
+    .then(documents => {
+      // response must be inside the async task
+      res.status(200).json({
+        msg: 'Posts fetched succesfully',
+        posts: documents
+      });
+    });
 });
 
 module.exports = app;
