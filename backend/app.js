@@ -49,10 +49,12 @@ app.post('/api/posts', (req, res, next) => {
     content: req.body.content
   })
   // save new post in mongodb (this method comes from mongoose)
-  post.save();
-  // 201 -> ok, new resource created
-  res.status(201).json({
-    message: 'Post data successfully'
+  post.save().then(result => {
+    // 201 -> ok, new resource created
+    res.status(201).json({
+    message: 'Post data successfully',
+    postId: result._id
+  });
   });
 });
 
@@ -80,9 +82,6 @@ app.delete('/api/posts/:id', (req, res, next) => {
         message: 'Deleted'
       });
     });
-  res.status(200).json({
-    message: 'Post deleted'
-  })
 });
 
 module.exports = app;
